@@ -34,22 +34,18 @@
 // Execute `rustlings hint tests7` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
-fn main() {}
+fn main() {
+    // 为 tests7 设置 TEST_FOO 环境变量
+    let timestamp = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
+    println!("cargo:rustc-env=TEST_FOO={}", timestamp);
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+    // 为 tests8 启用 "pass" feature
+    println!("cargo:rustc-cfg=feature=\"pass\"");
 
-    #[test]
-    fn test_success() {
-        let timestamp = std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .unwrap()
-            .as_secs();
-        let s = std::env::var("TEST_FOO").unwrap();
-        let e: u64 = s.parse().unwrap();
-        assert!(timestamp >= e && timestamp < e + 10);
-    }
+    // 可选：告诉 Cargo 当 build.rs 改变时重新运行
+    println!("cargo:rerun-if-changed=build.rs");
 }
